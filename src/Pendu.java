@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Arrays;
 import java.io.File;
 import java.util.ArrayList;
-import javax.swing.border.Border;
 
 
 /**
@@ -154,9 +153,6 @@ public class Pendu extends Application {
         hboxRight.getChildren().addAll(this.boutonMaison, this.boutonParametres, this.boutoninfo);
         return banniere;
     }
-
-    public 
-
     // /**
      // * @return le panel du chronomètre
      // */
