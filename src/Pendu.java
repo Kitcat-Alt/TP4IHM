@@ -10,17 +10,23 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TitledPane;
-import javafx.scene.layout.Region;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar.ButtonData ;
-import javafx.scene.control.ButtonType ;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
+
 import java.util.List;
 import java.util.Arrays;
 import java.io.File;
 import java.util.ArrayList;
+import javax.swing.border.Border;
 
 
 /**
@@ -80,6 +86,10 @@ public class Pendu extends Application {
     /**
      * le bouton qui permet de (lancer ou relancer une partie
      */ 
+    private Button boutoninfo;
+    /**
+     * le bouton qui permet d'afficher les règles
+     */ 
     private Button bJouer;
 
     /**
@@ -106,11 +116,46 @@ public class Pendu extends Application {
     /**
      * @return le panel contenant le titre du jeu
      */
-    private Pane titre(){
+    private BorderPane titre(){
         // A implementer          
-        Pane banniere = new Pane();
+        BorderPane banniere = new BorderPane();
+        banniere.setStyle("-fx-background-color:rgb(218, 230, 243);");
+        Text TxtTop = new Text("Jeu du Pendu");
+        banniere.setPadding(new Insets(20));
+        TxtTop.setFont(Font.font("Arial", 30));
+        banniere.setLeft(TxtTop);
+        //---------------------------------------------
+        HBox hboxRight = new HBox();
+        hboxRight.setSpacing(2.);
+        banniere.setRight(hboxRight);
+        //---------------------------------------------
+        Image imgMaison = new Image("home.png");
+        ImageView imgwMaison = new ImageView();
+        imgwMaison.setFitWidth(20);
+        imgwMaison.setFitHeight(20);
+        imgwMaison.setImage(imgMaison);
+        this.boutonMaison = new Button("",imgwMaison);
+
+        Image imgPara = new Image("parametres.png");
+        ImageView imgwPara = new ImageView();
+        imgwPara.setImage(imgPara);
+        imgwPara.setFitHeight(20);
+        imgwPara.setFitWidth(20);
+        this.boutonParametres = new Button("",imgwPara);
+
+        Image imgInfo = new Image("info.png");
+        ImageView imgwInfo = new ImageView();
+        imgwInfo.setImage(imgInfo);
+        imgwInfo.setFitHeight(20);
+        imgwInfo.setFitWidth(20);
+        this.boutoninfo = new Button("",imgwInfo);
+        this.boutoninfo.setOnAction(new ControleurInfos(this));
+        //---------------------------------------------
+        hboxRight.getChildren().addAll(this.boutonMaison, this.boutonParametres, this.boutoninfo);
         return banniere;
     }
+
+    public 
 
     // /**
      // * @return le panel du chronomètre
