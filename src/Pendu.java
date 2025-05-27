@@ -108,7 +108,7 @@ public class Pendu extends Application {
     private Scene laScene(){
         BorderPane fenetre = new BorderPane();
         fenetre.setTop(this.titre());
-        fenetre.setCenter(this.panelCentral);
+        fenetre.setCenter(this.fenetreAccueil());
         return new Scene(fenetre, 800, 1000);
     }
 
@@ -134,6 +134,7 @@ public class Pendu extends Application {
         imgwMaison.setFitHeight(20);
         imgwMaison.setImage(imgMaison);
         this.boutonMaison = new Button("",imgwMaison);
+        this.boutonMaison.setOnAction(new RetourAccueil(this.modelePendu, this));
 
         Image imgPara = new Image("parametres.png");
         ImageView imgwPara = new ImageView();
@@ -172,14 +173,42 @@ public class Pendu extends Application {
         // return res;
     // }
 
-    // /**
-     // * @return la fenêtre d'accueil sur laquelle on peut choisir les paramètres de jeu
-     // */
-    // private Pane fenetreAccueil(){
-        // A implementer    
-        // Pane res = new Pane();
-        // return res;
-    // }
+    /**
+    / * @return la fenêtre d'accueil sur laquelle on peut choisir les paramètres de jeu
+    / */
+    private BorderPane fenetreAccueil(){
+        this.panelCentral = new BorderPane();
+        this.bJouer = new Button("Lancer une partie");
+
+        VBox vBoxCenter = new VBox(15);
+        //this.panelCentral.setTop(bJouer);
+
+        TitledPane tpDifficulte = new TitledPane();
+
+        VBox vBoxRadio = new VBox(10);
+
+        ToggleGroup tgRadio = new ToggleGroup();
+        RadioButton facile = new RadioButton("Facile");
+        RadioButton medium = new RadioButton("Médium");
+        RadioButton difficle = new RadioButton("Difficile");
+        RadioButton expert = new RadioButton("Expert");
+
+        facile.setToggleGroup(tgRadio);
+        medium.setToggleGroup(tgRadio);
+        difficle.setToggleGroup(tgRadio);
+        expert.setToggleGroup(tgRadio);
+
+        vBoxRadio.getChildren().addAll(facile, medium, difficle, expert);
+        tpDifficulte.setContent(vBoxRadio);
+
+        vBoxCenter.setPadding(new Insets(10,10,10,10));
+        vBoxCenter.getChildren().addAll(bJouer, tpDifficulte);
+        
+        this.panelCentral.setCenter(vBoxCenter);
+
+        //this.panelCentral.setCenter(tpDifficulte);
+        return this.panelCentral;
+     }
 
     /**
      * charge les images à afficher en fonction des erreurs
@@ -194,7 +223,7 @@ public class Pendu extends Application {
     }
 
     public void modeAccueil(){
-        // A implementer
+        this.fenetreAccueil();
     }
     
     public void modeJeu(){
