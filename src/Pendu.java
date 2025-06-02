@@ -224,6 +224,7 @@ public class Pendu extends Application {
 
     public void modeAccueil(){
         this.fenetreAccueil();
+        laScene();
     }
     
     public void modeJeu(){
