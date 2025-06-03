@@ -66,7 +66,7 @@ public class Pendu extends Application {
      * le text qui indique le niveau de difficulté
      */
     private Text leNiveau;
-    /**
+    /** 
      * le chronomètre qui sera géré par une clasee à implémenter
      */
     private Chronometre chrono;
@@ -108,7 +108,8 @@ public class Pendu extends Application {
     private Scene laScene(){
         BorderPane fenetre = new BorderPane();
         fenetre.setTop(this.titre());
-        fenetre.setCenter(this.fenetreAccueil());
+        //fenetre.setCenter(this.fenetreAccueil());
+        fenetre.setCenter(this.panelCentral);
         return new Scene(fenetre, 800, 1000);
     }
 
@@ -163,21 +164,29 @@ public class Pendu extends Application {
         // return res;
     // }
 
-    // /**
-     // * @return la fenêtre de jeu avec le mot crypté, l'image, la barre
-     // *         de progression et le clavier
-     // */
-    // private Pane fenetreJeu(){
-        // A implementer
-        // Pane res = new Pane();
-        // return res;
-    // }
+    /**
+     * @return la fenêtre de jeu avec le mot crypté, l'image, la barre
+     *         de progression et le clavier
+     */
+    //private BorderPane fenetreJeu(){
+    //    BorderPane fenetrejeu = new BorderPane();
+    //    fenetrejeu.setTop(this.motCrypte);
+    //    fenetrejeu.setCenter(this.dessin);
+    //    BorderPane progessBarClavier = new BorderPane();
+    //    VBox vBox = new VBox();
+    //    vBox.getChildren().addAll(this.pg, this.clavier);
+    //    progessBarClavier.setCenter(vBox);
+    //    fenetrejeu.setBottom(progessBarClavier);
+    //    this.panelCentral = fenetrejeu;
+    //    return this.panelCentral;
+//
+    //}
 
     /**
     / * @return la fenêtre d'accueil sur laquelle on peut choisir les paramètres de jeu
     / */
     private BorderPane fenetreAccueil(){
-        this.panelCentral = new BorderPane();
+        BorderPane panelcentral = new BorderPane();
         this.bJouer = new Button("Lancer une partie");
 
         VBox vBoxCenter = new VBox(15);
@@ -198,14 +207,19 @@ public class Pendu extends Application {
         difficle.setToggleGroup(tgRadio);
         expert.setToggleGroup(tgRadio);
 
+        facile.setOnAction(new ControleurNiveau(this.modelePendu));
+        medium.setOnAction(new ControleurNiveau(this.modelePendu));
+        difficle.setOnAction(new ControleurNiveau(this.modelePendu));
+        expert.setOnAction(new ControleurNiveau(this.modelePendu));
+
         vBoxRadio.getChildren().addAll(facile, medium, difficle, expert);
         tpDifficulte.setContent(vBoxRadio);
 
         vBoxCenter.setPadding(new Insets(10,10,10,10));
         vBoxCenter.getChildren().addAll(bJouer, tpDifficulte);
         
-        this.panelCentral.setCenter(vBoxCenter);
-
+        panelcentral.setCenter(vBoxCenter);
+        this.panelCentral = panelcentral;
         //this.panelCentral.setCenter(tpDifficulte);
         return this.panelCentral;
      }
@@ -223,11 +237,14 @@ public class Pendu extends Application {
     }
 
     public void modeAccueil(){
+        this.boutonMaison.setDisable(true);
         this.fenetreAccueil();
         laScene();
     }
     
     public void modeJeu(){
+        //this.fenetreJeu();
+        this.boutonMaison.setDisable(false);
         // A implementer
     }
     
@@ -237,6 +254,7 @@ public class Pendu extends Application {
 
     /** lance une partie */
     public void lancePartie(){
+        modeJeu();
         // A implementer
     }
 
