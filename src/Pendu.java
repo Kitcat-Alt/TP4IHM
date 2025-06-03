@@ -90,6 +90,8 @@ public class Pendu extends Application {
      * le bouton qui permet d'afficher les règles
      */ 
     private Button bJouer;
+    
+    private Stage stage;
 
     /**
      * initialise les attributs (créer le modèle, charge les images, crée le chrono ...)
@@ -168,25 +170,32 @@ public class Pendu extends Application {
      * @return la fenêtre de jeu avec le mot crypté, l'image, la barre
      *         de progression et le clavier
      */
-    //private BorderPane fenetreJeu(){
-    //    BorderPane fenetrejeu = new BorderPane();
-    //    fenetrejeu.setTop(this.motCrypte);
-    //    fenetrejeu.setCenter(this.dessin);
-    //    BorderPane progessBarClavier = new BorderPane();
-    //    VBox vBox = new VBox();
-    //    vBox.getChildren().addAll(this.pg, this.clavier);
-    //    progessBarClavier.setCenter(vBox);
-    //    fenetrejeu.setBottom(progessBarClavier);
-    //    this.panelCentral = fenetrejeu;
-    //    return this.panelCentral;
-//
-    //}
+    private BorderPane fenetreJeu(){
+        this.boutonMaison.setDisable(false);
+        this.boutonParametres.setDisable(true);
+        this.panelCentral = new BorderPane();
+        VBox test = new VBox();
+        TextField tt = new TextField();
+        test.getChildren().add(tt);
+        this.panelCentral.setCenter(test);
+        //fenetrejeu.setTop(this.motCrypte);
+        //fenetrejeu.setCenter(this.dessin);
+        //BorderPane progessBarClavier = new BorderPane();
+        //VBox vBox = new VBox();
+        //vBox.getChildren().addAll(this.pg, this.clavier);
+        //progessBarClavier.setCenter(vBox);
+        //fenetrejeu.setBottom(progessBarClavier);
+        //this.panelCentral = fenetrejeu;
+        return this.panelCentral;
+
+    }
 
     /**
     / * @return la fenêtre d'accueil sur laquelle on peut choisir les paramètres de jeu
     / */
     private BorderPane fenetreAccueil(){
-        BorderPane panelcentral = new BorderPane();
+        this.boutonMaison.setDisable(true);
+        this.panelCentral = new BorderPane();
         this.bJouer = new Button("Lancer une partie");
 
         VBox vBoxCenter = new VBox(15);
@@ -199,30 +208,31 @@ public class Pendu extends Application {
         ToggleGroup tgRadio = new ToggleGroup();
         RadioButton facile = new RadioButton("Facile");
         RadioButton medium = new RadioButton("Médium");
-        RadioButton difficle = new RadioButton("Difficile");
+        RadioButton difficile = new RadioButton("Difficile");
         RadioButton expert = new RadioButton("Expert");
 
         facile.setToggleGroup(tgRadio);
         medium.setToggleGroup(tgRadio);
-        difficle.setToggleGroup(tgRadio);
+        difficile.setToggleGroup(tgRadio);
         expert.setToggleGroup(tgRadio);
 
         facile.setOnAction(new ControleurNiveau(this.modelePendu));
         medium.setOnAction(new ControleurNiveau(this.modelePendu));
-        difficle.setOnAction(new ControleurNiveau(this.modelePendu));
+        difficile.setOnAction(new ControleurNiveau(this.modelePendu));
         expert.setOnAction(new ControleurNiveau(this.modelePendu));
 
-        vBoxRadio.getChildren().addAll(facile, medium, difficle, expert);
+        this.bJouer.setOnAction(new ControleurLancerPartie(modelePendu, this));
+
+        vBoxRadio.getChildren().addAll(facile, medium, difficile, expert);
         tpDifficulte.setContent(vBoxRadio);
 
         vBoxCenter.setPadding(new Insets(10,10,10,10));
         vBoxCenter.getChildren().addAll(bJouer, tpDifficulte);
         
-        panelcentral.setCenter(vBoxCenter);
-        this.panelCentral = panelcentral;
+        this.panelCentral.setCenter(vBoxCenter);
         //this.panelCentral.setCenter(tpDifficulte);
         return this.panelCentral;
-     }
+    }
 
     /**
      * charge les images à afficher en fonction des erreurs
@@ -237,14 +247,15 @@ public class Pendu extends Application {
     }
 
     public void modeAccueil(){
-        this.boutonMaison.setDisable(true);
         this.fenetreAccueil();
-        laScene();
+        this.stage.setScene(laScene());
+        
+
     }
     
     public void modeJeu(){
-        //this.fenetreJeu();
-        this.boutonMaison.setDisable(false);
+        this.fenetreJeu();
+        this.stage.setScene(laScene());
         // A implementer
     }
     
@@ -304,8 +315,9 @@ public class Pendu extends Application {
      */
     @Override
     public void start(Stage stage) {
-        stage.setTitle("IUTEAM'S - La plateforme de jeux de l'IUTO");
-        stage.setScene(this.laScene());
+        this.stage = stage;
+        this.stage.setTitle("IUTEAM'S - La plateforme de jeux de l'IUTO");
+        this.stage.setScene(this.laScene());
         this.modeAccueil();
         stage.show();
     }
