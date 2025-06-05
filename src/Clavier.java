@@ -4,7 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.TilePane;
-import javafx.scene.shape.Circle ;
+import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -21,12 +21,28 @@ public class Clavier extends TilePane{
 
     /**
      * constructeur du clavier
-     * @param touches une chaine de caractères qui contient les lettres à mettre sur les touches
+     * @param touches une liste de chaine de caractères qui contient les lettres à mettre sur les touches
      * @param actionTouches le contrôleur des touches
      * @param tailleLigne nombre de touches par ligne
      */
-    public Clavier(String touches, EventHandler<ActionEvent> actionTouches) {
-        // A implémenter
+    public Clavier(List<String> touches, EventHandler<ActionEvent> actionTouches, int tailleLigne) {
+        super();
+        this.setPadding(new Insets(10, 10, 10, 10));
+        this.setVgap(2);
+        this.setHgap(2);
+        this.setPrefRows(4);
+        this.setPrefColumns(tailleLigne);
+        this.setMaxWidth(425);
+        //this.setPrefRows(tailleLigne);
+        //this.setMaxWidth(400);
+        this.clavier = new ArrayList<>();
+        for(String lettre : touches){
+            Button boutonLettre = new Button(lettre);
+            boutonLettre.setShape(new Circle(1.5));
+            boutonLettre.setOnAction(actionTouches);
+            this.getChildren().addAll(boutonLettre);
+            this.clavier.add(boutonLettre);
+        }
     }
 
     /**

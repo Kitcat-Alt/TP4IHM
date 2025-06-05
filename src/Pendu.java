@@ -25,6 +25,7 @@ import javafx.scene.layout.TilePane;
 import java.util.List;
 import java.util.Arrays;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -98,8 +99,8 @@ public class Pendu extends Application {
      */
     @Override
     public void init() {
-        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);
-        this.modelePendu = new MotMystere("/home/Kitcat/TP4IHM/dict/french", 3, 10, MotMystere.FACILE, 10);
+        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);
+        //this.modelePendu = new MotMystere("/home/Kitcat/TP4IHM/dict/french", 3, 10, MotMystere.FACILE, 10);
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
         // A terminer d'implementer
@@ -175,18 +176,17 @@ public class Pendu extends Application {
         this.boutonMaison.setDisable(false);
         this.boutonParametres.setDisable(true);
         this.panelCentral = new BorderPane();
-        VBox test = new VBox();
-        TextField tt = new TextField();
-        test.getChildren().add(tt);
-        this.panelCentral.setCenter(test);
-        //fenetrejeu.setTop(this.motCrypte);
-        //fenetrejeu.setCenter(this.dessin);
-        //BorderPane progessBarClavier = new BorderPane();
-        //VBox vBox = new VBox();
-        //vBox.getChildren().addAll(this.pg, this.clavier);
-        //progessBarClavier.setCenter(vBox);
-        //fenetrejeu.setBottom(progessBarClavier);
-        //this.panelCentral = fenetrejeu;
+        VBox barreClavier = new VBox();
+        barreClavier.setFillWidth(false);
+        List<String> alphabet = Arrays.asList("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","-");
+        this.clavier = new Clavier(alphabet, new ControleurLettres(modelePendu, this),8);
+        
+        this.motCrypte = new Text(this.modelePendu.getMotCrypte());
+        
+        barreClavier.getChildren().addAll(clavier);
+        this.panelCentral.setTop(this.motCrypte);
+        this.panelCentral.setCenter(this.dessin);
+        this.panelCentral.setBottom(barreClavier);        
         return this.panelCentral;
 
     }
@@ -195,7 +195,6 @@ public class Pendu extends Application {
     / * @return la fenêtre d'accueil sur laquelle on peut choisir les paramètres de jeu
     / */
     private BorderPane fenetreAccueil(){
-        this.boutonMaison.setDisable(true);
         this.panelCentral = new BorderPane();
         this.bJouer = new Button("Lancer une partie");
 
@@ -229,7 +228,8 @@ public class Pendu extends Application {
 
         vBoxCenter.setPadding(new Insets(10,10,10,10));
         vBoxCenter.getChildren().addAll(bJouer, tpDifficulte);
-        
+
+        this.boutonMaison.setDisable(true);
         this.panelCentral.setCenter(vBoxCenter);
         //this.panelCentral.setCenter(tpDifficulte);
         return this.panelCentral;
