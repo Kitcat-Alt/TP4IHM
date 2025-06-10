@@ -94,6 +94,8 @@ public class Pendu extends Application {
     
     private Stage stage;
 
+    private int cptImage;
+
     /**
      * initialise les attributs (créer le modèle, charge les images, crée le chrono ...)
      */
@@ -103,6 +105,8 @@ public class Pendu extends Application {
         //this.modelePendu = new MotMystere("/home/Kitcat/TP4IHM/dict/french", 3, 10, MotMystere.FACILE, 10);
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
+        this.dessin = new ImageView();
+        this.cptImage = 0;
         // A terminer d'implementer
     }
 
@@ -181,8 +185,11 @@ public class Pendu extends Application {
         List<String> alphabet = Arrays.asList("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","-");
         this.clavier = new Clavier(alphabet, new ControleurLettres(modelePendu, this),8);
         
+        
         this.motCrypte = new Text(this.modelePendu.getMotCrypte());
         
+        this.dessin.setImage(lesImages.get(this.modelePendu.getNbErreursMax() - this.modelePendu.getNbErreursRestants()));
+
         barreClavier.getChildren().addAll(clavier);
         this.panelCentral.setTop(this.motCrypte);
         this.panelCentral.setCenter(this.dessin);
@@ -193,7 +200,7 @@ public class Pendu extends Application {
 
     /**
     / * @return la fenêtre d'accueil sur laquelle on peut choisir les paramètres de jeu
-    / */
+    / */ 
     private BorderPane fenetreAccueil(){
         this.panelCentral = new BorderPane();
         this.bJouer = new Button("Lancer une partie");
@@ -267,6 +274,7 @@ public class Pendu extends Application {
     /** lance une partie */
     public void lancePartie(){
         modeJeu();
+        this.cptImage = 0;
         // A implementer
     }
 
@@ -274,7 +282,7 @@ public class Pendu extends Application {
      * raffraichit l'affichage selon les données du modèle
      */
     public void majAffichage(){
-        // A implementer
+        this.cptImage++;
     }
 
     /**

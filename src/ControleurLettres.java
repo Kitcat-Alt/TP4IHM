@@ -33,6 +33,7 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
+        this.vuePendu.majAffichage();
         System.out.println("touche préssée");
     }
 }
