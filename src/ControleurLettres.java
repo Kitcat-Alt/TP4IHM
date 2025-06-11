@@ -34,6 +34,9 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent actionEvent) {
         this.vuePendu.majAffichage();
+        if(this.modelePendu.gagne()){
+            
+        }
         System.out.println("touche préssée");
     }
 }
