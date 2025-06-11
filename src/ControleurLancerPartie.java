@@ -1,6 +1,9 @@
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+
 import java.util.Optional;
 
 /**
@@ -34,14 +37,38 @@ public class ControleurLancerPartie implements EventHandler<ActionEvent> {
     public void handle(ActionEvent actionEvent) {
         // A implémenter
     
-        Optional<ButtonType> reponse = this.vuePendu.popUpPartieEnCours().showAndWait(); // on lance la fenêtre popup et on attends la réponse
-        // si la réponse est oui
-        if (reponse.isPresent() && reponse.get().equals(ButtonType.YES)){
-            this.vuePendu.modeJeu();
-            System.out.println("Ok !");
+        Toggle choixUser = this.vuePendu.getIndiv().getSelectedToggle();
+        if (choixUser != null) {
+            RadioButton selectedRadio = (RadioButton) choixUser;
+            String choix = selectedRadio.getText(); 
+            switch (choix) {
+                case "facile":
+                    this.modelePendu.setNiveau(MotMystere.FACILE);
+                    break;
+                case "medium":
+                    this.modelePendu.setNiveau(MotMystere.MOYEN);
+                    break;
+                case "difficile":
+                    this.modelePendu.setNiveau(MotMystere.DIFFICILE);
+                    break;
+                case "expert":
+                    this.modelePendu.setNiveau(MotMystere.EXPERT);
+                    break;
+            } 
+        }
+        if (!(this.modelePendu.gagne())&& !(this.modelePendu.perdu())){
+            Optional<ButtonType> reponse = this.vuePendu.popUpPartieEnCours().showAndWait(); 
+            // si la réponse est oui
+            if (reponse.isPresent() && reponse.get().equals(ButtonType.YES)){
+                this.vuePendu.lancePartie();
+                System.out.println("Ok !");
+            }
+            else{
+                System.out.println("D'ac !");
+            }
         }
         else{
-            System.out.println("D'ac !");
-        }
+            this.vuePendu.lancePartie();
+        }   
     }
 }

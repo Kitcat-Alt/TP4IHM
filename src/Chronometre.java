@@ -3,6 +3,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
@@ -24,6 +25,9 @@ public class Chronometre extends Text{
      */
     private ControleurChronometre actionTemps;
 
+    private Label temps;
+
+
     /**
      * Constructeur permettant de créer le chronomètre
      * avec un label initialisé à "0:0:0"
@@ -31,6 +35,13 @@ public class Chronometre extends Text{
      */
     public Chronometre(){
         // A implémenter
+        super(); 
+        setFont(Font.font("Calibri", 20));
+        setTextAlignment(TextAlignment.CENTER);
+        actionTemps = new ControleurChronometre(this);
+        keyFrame = new KeyFrame(Duration.seconds(1), actionTemps);
+        timeline = new Timeline(keyFrame);
+        timeline.setCycleCount(Animation.INDEFINITE);
     }
 
     /**
@@ -40,6 +51,15 @@ public class Chronometre extends Text{
      */
     public void setTime(long tempsMillisec){
         // A implémenter
+        long secondes = tempsMillisec /100;
+        if( secondes>=60){
+            long minutes = secondes/60;
+            secondes -= minutes*60;
+            this.temps.setText(minutes + " min "+ secondes+ " s ");
+        }
+        else{
+            this.temps.setText(secondes + "s");
+        }
     }
 
     /**
@@ -47,6 +67,7 @@ public class Chronometre extends Text{
      */
     public void start(){
         // A implémenter
+        this.timeline.play();
     }
 
     /**
@@ -54,6 +75,7 @@ public class Chronometre extends Text{
      */
     public void stop(){
         // A implémenter
+        this.timeline.stop();
     }
 
     /**
@@ -61,5 +83,8 @@ public class Chronometre extends Text{
      */
     public void resetTime(){
         // A implémenter
+        this.timeline.stop();
+        this.actionTemps.reset();
+        setText("0"); 
     }
 }

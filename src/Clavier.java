@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.TilePane;
 import javafx.scene.shape.Circle;
 import java.util.ArrayList;
+import javafx.scene.Node;
 import java.util.List;
 import java.util.Set;
 
@@ -51,5 +52,16 @@ public class Clavier extends TilePane{
      */
     public void desactiveTouches(Set<String> touchesDesactivees){
         // A implémenter
+        for (Node node : this.getChildren()){
+            if (node instanceof Button){
+                Button btn = (Button) node;
+                if (touchesDesactivees.contains(btn.getText())){
+                    btn.setDisable(true);
+                }
+                else{
+                    btn.setDisable(false);
+                }
+            }
+        } 
     }
 }

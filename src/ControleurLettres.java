@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.Set;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -17,6 +20,9 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
      */
     private Pendu vuePendu;
 
+    private Set<String> ensemble;
+
+
     /**
      * @param modelePendu modèle du jeu
      * @param vuePendu vue du jeu
@@ -24,6 +30,7 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
     ControleurLettres(MotMystere modelePendu, Pendu vuePendu){
         this.modelePendu= modelePendu;
         this.vuePendu = vuePendu;
+        this.ensemble = new HashSet<>();
     }
 
     /**
@@ -33,10 +40,17 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
+        Button button = (Button) (actionEvent.getSource());
+        String lettreATrouver = button.getText();
+        this.ensemble.add(lettreATrouver);
+        this.vuePendu.getClavier().desactiveTouches(ensemble);
+        this.modelePendu.essaiLettre(lettreATrouver.charAt(0));
         this.vuePendu.majAffichage();
-        if(this.modelePendu.gagne()){
-            
+        if (this.modelePendu.gagne()) {
+            this.vuePendu.popUpMessageGagne().showAndWait();
         }
-        System.out.println("touche préssée");
+        if (this.modelePendu.perdu()) {
+            this.vuePendu.popUpMessagePerdu().showAndWait();
+        }
     }
 }
