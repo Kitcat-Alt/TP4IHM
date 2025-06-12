@@ -40,11 +40,20 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
+        // on récupère la valeur de la lettre du bouton qui a été préssé
         Button button = (Button) (actionEvent.getSource());
         String lettreATrouver = button.getText();
+
+        //on ajoute cette lettre à l'ensemble des lettres déjà préssées
         this.ensemble.add(lettreATrouver);
+
+        //on désactive la touche qui vient d'être préssée
         this.vuePendu.getClavier().desactiveTouches(ensemble);
+
+        //on vérifie si la lettre fait partie du mot à trouver
         this.modelePendu.essaiLettre(lettreATrouver.charAt(0));
+
+        //on met à jour la vue
         this.vuePendu.majAffichage();
         if (this.modelePendu.gagne()) {
             this.vuePendu.popUpMessageGagne().showAndWait();

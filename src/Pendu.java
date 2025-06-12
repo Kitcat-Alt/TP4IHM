@@ -91,18 +91,25 @@ public class Pendu extends Application {
      * le bouton qui permet d'afficher les règles
      */ 
     private Button bJouer;
-    
+    /**
+     * le bouton qui permet de lancer une partie
+     */
     private Stage stage;
-
+    /**
+     * le stage de l'application
+     */
     private ToggleGroup regroupeRadioButton;
+    /**
+     * le toggle group pour les radio boutons pour la difficulté
+     */
 
     /**
      * initialise les attributs (créer le modèle, charge les images, crée le chrono ...)
      */
     @Override
     public void init() {
-        //this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);
-        this.modelePendu = new MotMystere("/home/Kitcat/TP4IHM/dict/french", 3, 10, MotMystere.FACILE, 10);
+        this.modelePendu = new MotMystere("/usr/share/dict/french", 3, 10, MotMystere.FACILE, 10);
+        //this.modelePendu = new MotMystere("/home/Kitcat/TP4IHM/dict/french", 3, 10, MotMystere.FACILE, 10);
         this.lesImages = new ArrayList<Image>();
         this.chargerImages("./img");
         this.dessin = new ImageView();
@@ -130,7 +137,7 @@ public class Pendu extends Application {
      * @return le panel contenant le titre du jeu
      */
     private BorderPane titre(){
-        // A implementer          
+        //partie gauche du borderpane avec le Text           
         BorderPane banniere = new BorderPane();
         banniere.setStyle("-fx-background-color:rgb(218, 230, 243);");
         Text TxtTop = new Text("Jeu du Pendu");
@@ -138,10 +145,12 @@ public class Pendu extends Application {
         TxtTop.setFont(Font.font("Arial", 30));
         banniere.setLeft(TxtTop);
         //---------------------------------------------
+        // l'HBox qui va contenir la partie droite du broderPane
         HBox hboxRight = new HBox();
         hboxRight.setSpacing(2.);
         banniere.setRight(hboxRight);
         //---------------------------------------------
+        // initialisation des trois boutons de la bannière et de leurs images
         Image imgMaison = new Image("home.png");
         ImageView imgwMaison = new ImageView();
         imgwMaison.setFitWidth(20);
@@ -186,6 +195,7 @@ public class Pendu extends Application {
      *         de progression et le clavier
      */
     private BorderPane fenetreJeu(){
+        //on desactive les boutons et on créer un nouveau borderpane pour le panel central
         this.chrono.setVisible(true);  
         this.dessin.setImage(this.lesImages.get(0)); 
         this.dessin.setFitHeight(500);
@@ -194,21 +204,25 @@ public class Pendu extends Application {
         this.boutonParametres.setDisable(true);
         this.panelCentral = new BorderPane();
 
+        //on lie le controlleur RetourAcceuil au boutonMaison
         RetourAccueil accueil = new RetourAccueil(modelePendu, this);
         this.boutonMaison.setOnAction(accueil);
 
+        //on initialise la vbox qui va être le center du borderpane, elle va contenir le clavier, le mot crypté, l'image du pendu et la barre de progression
         VBox bpCenter = new VBox();
         bpCenter.setFillWidth(false);
+        //on crée le clavier
         List<String> alphabet = Arrays.asList("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","-");
         this.clavier = new Clavier(alphabet, new ControleurLettres(modelePendu, this),8);
         clavier.setHgap(10);
         clavier.setVgap(10);
         
-        
+        //on génère le mot crypté
         this.motCrypte = new Text(this.modelePendu.getMotCrypte());
         this.motCrypte.setFont(Font.font("Arial", FontWeight.BOLD, 36));
         this.motCrypte.setTextAlignment(TextAlignment.CENTER);
         
+        //on met la première image du pendu
         this.dessin.setImage(lesImages.get(this.modelePendu.getNbErreursMax() - this.modelePendu.getNbErreursRestants()));
 
         bpCenter.setAlignment(Pos.TOP_CENTER);
@@ -217,11 +231,13 @@ public class Pendu extends Application {
 
         this.panelCentral.setCenter(bpCenter);
 
-        VBox bpight = new VBox(15);
+        //on initialise la vbox qui va être la droite du borderpane, elle va contenir le chrono, et le niveau choisi
+        VBox bpRight = new VBox(15);
 
-        bpight.setPrefWidth(275);
-        bpight.setPadding(new Insets(30, 0, 0, 0));
+        bpRight.setPrefWidth(275);
+        bpRight.setPadding(new Insets(30, 0, 0, 0));
         
+        //en fonction du niveau choisit on met à jour le Text du niveau
         int niveau = this.modelePendu.getNiveau();
         switch (niveau) {
             case 0 : this.leNiveau.setText("Niveau Facile"); break;
@@ -230,11 +246,14 @@ public class Pendu extends Application {
             case 3 : this.leNiveau.setText("Niveau Expert"); break;
         }
         this.leNiveau.setFont(Font.font("Arial", FontWeight.BLACK, 20));
+
+        //On créer le controleur relancer partie et on le lie au bouton nouveau mot
         ControleurLancerPartie reLancerPartie = new ControleurLancerPartie(modelePendu, this);
         Button nouveauMot = new Button("Nouveau mot");
         nouveauMot.setOnAction(reLancerPartie);
-        bpight.getChildren().addAll(this.leNiveau, this.leChrono(), nouveauMot);
-        this.panelCentral.setRight(bpight);
+
+        bpRight.getChildren().addAll(this.leNiveau, this.leChrono(), nouveauMot);
+        this.panelCentral.setRight(bpRight);
         return this.panelCentral;
 
     }
@@ -243,32 +262,38 @@ public class Pendu extends Application {
     / * @return la fenêtre d'accueil sur laquelle on peut choisir les paramètres de jeu
     / */ 
     private BorderPane fenetreAccueil(){
+        // on initialize un borderPane et le bouton pour lancer la partie
         this.panelCentral = new BorderPane();
         this.bJouer = new Button("Lancer une partie");
 
+        //on fait un VBox qui va contenir le toogle group pour la difficulté
         VBox vBoxCenter = new VBox(15);
-        //this.panelCentral.setTop(bJouer);
 
         TitledPane tpDifficulte = new TitledPane();
 
+        //on fait une VBox pour acceuilier les radioBoutons
         VBox vBoxRadio = new VBox(10);
 
+        //on créer un tooglegroup et les radiois boutons
         this.regroupeRadioButton = new ToggleGroup();
         RadioButton facile = new RadioButton("Facile");
         RadioButton medium = new RadioButton("Médium");
         RadioButton difficile = new RadioButton("Difficile");
         RadioButton expert = new RadioButton("Expert");
 
+        //on ajoute chaque radioBouton au toogle group
         facile.setToggleGroup(this.regroupeRadioButton);
         medium.setToggleGroup(this.regroupeRadioButton);
         difficile.setToggleGroup(this.regroupeRadioButton);
         expert.setToggleGroup(this.regroupeRadioButton);
 
+        //on lie chaque radioBouton au controlleur niveau
         facile.setOnAction(new ControleurNiveau(this.modelePendu));
         medium.setOnAction(new ControleurNiveau(this.modelePendu));
         difficile.setOnAction(new ControleurNiveau(this.modelePendu));
         expert.setOnAction(new ControleurNiveau(this.modelePendu));
 
+        //on lie le bouton lancer partie au controlleur lancer partie
         this.bJouer.setOnAction(new ControleurLancerPartie(modelePendu, this));
 
         vBoxRadio.getChildren().addAll(facile, medium, difficile, expert);
@@ -295,6 +320,9 @@ public class Pendu extends Application {
         }
     }
 
+    /**
+     * change le panelCentral pour afficher la fenetre acceuil
+     */
     public void modeAccueil(){
         this.fenetreAccueil();
         this.stage.setScene(laScene());
@@ -302,6 +330,9 @@ public class Pendu extends Application {
 
     }
     
+    /**
+     * change le panelCentral pour afficher le mode jeu
+     */
     public void modeJeu(){
         this.fenetreJeu();
         this.stage.setScene(laScene());
@@ -331,7 +362,11 @@ public class Pendu extends Application {
         double progression = (double) this.modelePendu.getNbEssais() / this.modelePendu.getNbErreursMax();
         this.pg.setProgress(progression);
     }
+    
 
+    /**
+     * met a jour l'image du pendu 
+     */
     public void majImg() {
         int indImg = this.modelePendu.getNbErreursMax() - this.modelePendu.getNbErreursRestants();
         if (indImg >= 0 && indImg < this.lesImages.size()) {

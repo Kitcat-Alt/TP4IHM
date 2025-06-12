@@ -1,5 +1,5 @@
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Modèle pour le jeu du pendu.
@@ -254,6 +254,9 @@ public class MotMystere {
                " nombre d'essais restents: "+this.nbErreursRestantes;
     }
 
+    /**
+     * créer un nouveau mot mystère
+     */
     public void relancerPartie(){
         String nouveauMot = this.dict.choisirMot();
         this.initMotMystere(nouveauMot, this.niveau, this.nbEerreursMax);

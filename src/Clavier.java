@@ -36,6 +36,8 @@ public class Clavier extends TilePane{
         this.setMaxWidth(425);
         //this.setPrefRows(tailleLigne);
         //this.setMaxWidth(400);
+
+        //on parcours la liste des touches, pour chaque touche on créer un bouton, que l'on lie au controlleur lettre et on ajoute ce bouton au tilepane
         this.clavier = new ArrayList<>();
         for(String lettre : touches){
             Button boutonLettre = new Button(lettre);
@@ -48,13 +50,15 @@ public class Clavier extends TilePane{
 
     /**
      * permet de désactiver certaines touches du clavier (et active les autres)
-     * @param touchesDesactivees une chaine de caractères contenant la liste des touches désactivées
+     * @param touchesDesactivees un ensemble contenant les touches désactivées
      */
     public void desactiveTouches(Set<String> touchesDesactivees){
         // A implémenter
+        //on parcours les touches du clavier
         for (Node node : this.getChildren()){
             if (node instanceof Button){
                 Button btn = (Button) node;
+                //Si la touche fait partie des touches déjà préssées on désactive le bouton correspondant
                 if (touchesDesactivees.contains(btn.getText())){
                     btn.setDisable(true);
                 }
